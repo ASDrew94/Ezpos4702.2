@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="StoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="StoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Customer">
           <Key>
             <PropertyRef Name="Customer_ID" />
@@ -18,54 +18,23 @@
           <Property Name="Customer_State" Type="varchar" MaxLength="15" />
           <Property Name="Customer_Zip" Type="char" MaxLength="5" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Store.dbo.Inventory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Inventory">
-          <Key>
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ProductID" Type="int" Nullable="false" />
-          <Property Name="Quantity" Type="int" />
-        </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Product_name" Type="varchar" MaxLength="50" />
+          <Property Name="Product_name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Product_Description" Type="varchar" MaxLength="100" />
           <Property Name="Product_Wholesaler_Cost" Type="decimal" Precision="19" Scale="2" />
           <Property Name="Product_Min_Price" Type="decimal" Precision="19" Scale="2" />
           <Property Name="Product_Max_Price" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Product_Quantity" Type="int" />
         </EntityType>
-        <Association Name="FK_Inventory_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="Inventory" Type="Self.Inventory" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="Inventory">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="StoreModelStoreContainer">
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Inventory" EntityType="Self.Inventory" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Inventory].[ProductID] AS [ProductID], 
-    [Inventory].[Quantity] AS [Quantity]
-    FROM [dbo].[Inventory] AS [Inventory]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_Inventory_Products" Association="Self.FK_Inventory_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Inventory" EntitySet="Inventory" />
-          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="StoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -82,53 +51,28 @@ warning 6002: The table/view 'Store.dbo.Inventory' does not have a primary key d
           <Property Name="Customer_State" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Customer_Zip" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
         </EntityType>
+        <EntityContainer Name="StoreEntities5" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="Products" EntityType="StoreModel.Product" />
+        </EntityContainer>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductID" />
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Product_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Product_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Product_Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="Product_Wholesaler_Cost" Type="Decimal" Precision="19" Scale="2" />
           <Property Name="Product_Min_Price" Type="Decimal" Precision="19" Scale="2" />
           <Property Name="Product_Max_Price" Type="Decimal" Precision="19" Scale="2" />
-          <NavigationProperty Name="Inventory" Relationship="Self.FK_Inventory_Products" FromRole="Products" ToRole="Inventory" />
+          <Property Name="Product_Quantity" Type="Int32" />
         </EntityType>
-        <EntityType Name="Inventory">
-          <Key>
-            <PropertyRef Name="ProductID" />
-          </Key>
-          <Property Name="ProductID" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_Inventory_Products" FromRole="Inventory" ToRole="Products" />
-        </EntityType>
-        <Association Name="FK_Inventory_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="Inventory" Type="Self.Inventory" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="ProductID" />
-            </Principal>
-            <Dependent Role="Inventory">
-              <PropertyRef Name="ProductID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="StoreEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Customers" EntityType="Self.Customer" />
-          <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="Inventories" EntityType="Self.Inventory" />
-          <AssociationSet Name="FK_Inventory_Products" Association="Self.FK_Inventory_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="Inventory" EntitySet="Inventories" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="StoreModelStoreContainer" CdmEntityContainer="StoreEntities1">
+        <EntityContainerMapping StorageEntityContainer="StoreModelStoreContainer" CdmEntityContainer="StoreEntities5">
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="StoreModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
@@ -146,20 +90,13 @@ warning 6002: The table/view 'Store.dbo.Inventory' does not have a primary key d
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="StoreModel.Product">
               <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
-                <ScalarProperty Name="Product_Description" ColumnName="Product_Description" />
-                <ScalarProperty Name="Product_Wholesaler_Cost" ColumnName="Product_Wholesaler_Cost" />
-                <ScalarProperty Name="Product_Min_Price" ColumnName="Product_Min_Price" />
+                <ScalarProperty Name="Product_Quantity" ColumnName="Product_Quantity" />
                 <ScalarProperty Name="Product_Max_Price" ColumnName="Product_Max_Price" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Inventories">
-            <EntityTypeMapping TypeName="StoreModel.Inventory">
-              <MappingFragment StoreEntitySet="Inventory">
+                <ScalarProperty Name="Product_Min_Price" ColumnName="Product_Min_Price" />
+                <ScalarProperty Name="Product_Wholesaler_Cost" ColumnName="Product_Wholesaler_Cost" />
+                <ScalarProperty Name="Product_Description" ColumnName="Product_Description" />
+                <ScalarProperty Name="Product_name" ColumnName="Product_name" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -12,13 +12,12 @@ namespace Ezpos.Controllers
 {
     public class ProductsController : Controller
     {
-        private StoreEntities1 db = new StoreEntities1();
+        private StoreEntities5 db = new StoreEntities5();
 
         // GET: Products
         public ActionResult Index()
         {
-            var products = db.Products.Include(p => p.Inventory);
-            return View(products.ToList());
+            return View(db.Products.ToList());
         }
 
         // GET: Products/Details/5
@@ -39,7 +38,6 @@ namespace Ezpos.Controllers
         // GET: Products/Create
         public ActionResult Create()
         {
-            ViewBag.ProductID = new SelectList(db.Inventories, "ProductID", "ProductID");
             return View();
         }
 
@@ -48,7 +46,7 @@ namespace Ezpos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductID,Product_name,Product_Description,Product_Wholesaler_Cost,Product_Min_Price,Product_Max_Price")] Product product)
+        public ActionResult Create([Bind(Include = "ProductID,Product_name,Product_Description,Product_Wholesaler_Cost,Product_Min_Price,Product_Max_Price,Product_Quantity")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -57,7 +55,6 @@ namespace Ezpos.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ProductID = new SelectList(db.Inventories, "ProductID", "ProductID", product.ProductID);
             return View(product);
         }
 
@@ -73,7 +70,6 @@ namespace Ezpos.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.ProductID = new SelectList(db.Inventories, "ProductID", "ProductID", product.ProductID);
             return View(product);
         }
 
@@ -82,7 +78,7 @@ namespace Ezpos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProductID,Product_name,Product_Description,Product_Wholesaler_Cost,Product_Min_Price,Product_Max_Price")] Product product)
+        public ActionResult Edit([Bind(Include = "ProductID,Product_name,Product_Description,Product_Wholesaler_Cost,Product_Min_Price,Product_Max_Price,Product_Quantity")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +86,6 @@ namespace Ezpos.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ProductID = new SelectList(db.Inventories, "ProductID", "ProductID", product.ProductID);
             return View(product);
         }
 

@@ -13,10 +13,10 @@ namespace Ezpos.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class StoreEntities1 : DbContext
+    public partial class StoreEntities5 : DbContext
     {
-        public StoreEntities1()
-            : base("name=StoreEntities1")
+        public StoreEntities5()
+            : base("name=StoreEntities5")
         {
         }
     
@@ -27,6 +27,5 @@ namespace Ezpos.Models
     
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Inventory> Inventories { get; set; }
     }
 }

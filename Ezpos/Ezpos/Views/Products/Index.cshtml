@@ -27,7 +27,7 @@
             @Html.DisplayNameFor(model => model.Product_Max_Price)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Inventory.ProductID)
+            @Html.DisplayNameFor(model => model.Product_Quantity)
         </th>
         <th></th>
     </tr>
@@ -50,7 +50,7 @@
             @Html.DisplayFor(modelItem => item.Product_Max_Price)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Inventory.ProductID)
+            @Html.DisplayFor(modelItem => item.Product_Quantity)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ProductID }) |

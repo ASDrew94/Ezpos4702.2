@@ -20,7 +20,6 @@ namespace Ezpos.Models
         public Nullable<decimal> Product_Wholesaler_Cost { get; set; }
         public Nullable<decimal> Product_Min_Price { get; set; }
         public Nullable<decimal> Product_Max_Price { get; set; }
-    
-        public virtual Inventory Inventory { get; set; }
+        public Nullable<int> Product_Quantity { get; set; }
     }
 }
